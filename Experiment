@@ -1,0 +1,2533 @@
+<html><head>
+
+
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta http-equiv="expires" value="Mon, 1 Jan 2001 01:01:01 GMT">
+	<meta http-equiv="refresh" content="150">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <link rel="shortcut icon" href="/VAL/ico_valmer.ico">
+
+	
+	<link rel="Stylesheet" href="/VAL/Web_Benchmarks/CSS/Styles.css" type="text/css">
+	<link rel="Stylesheet" href="/VAL/Web_Benchmarks/CSS/Valmer.css" type="text/css">
+<script language="javascript">
+function cargaEmisoras(opcion){
+   formcal.precioSucio.value="";
+   formcal.precioSucio.disabled=true;
+   formcal.habilitaRadio.value=1;
+   formcal.b_sobretasa_yield.value=0;
+
+   if (formcal.habilitaPSucio.value==1) {
+      formcal.habilitaPSucio.value=0;
+   }
+   formcal.cambio_combo.value = 1;
+   formcal.calculo_datos.value = 0;
+   formcal.carga_fecha.value="";
+   formcal.submit();
+} 
+
+function yield(valor,sobretasaYield, habilitaText) {
+  if (habilitaText.value==1){
+     habilitaText.value=0;
+  } else {
+     habilitaText.value=1;
+  }
+  sobretasaYield.value=valor;
+  formcal.calculo_datos.value = 0;
+  formcal.submit();
+}
+
+function cargaSerie( ){
+   formcal.cambio_combo.value = 4;
+   formcal.calculo_datos.value = 0;
+   formcal.carga_fecha.value="";
+   formcal.submit();
+}
+function importaFecha( ){
+   formcal.carga_fecha.value = 1;
+   formcal.cambio_combo.value = 2;
+   formcal.calculo_datos.value = 0;
+   formcal.submit();
+}
+function cambioDatos( ){
+   formcal.carga_fecha.value = 2;
+   formcal.calculo_datos.value = 0;
+   formcal.submit();
+}
+function calculoDatos(){
+   formcal.calculo_datos.value = 1;
+   formcal.submit();
+}
+function borraDatos(){
+   formcal.sobretasa.value="";
+}
+function calculaTasas(cual){
+   // 1=sobretasa, 2=tasaRendimiento, 3=tasaMercado
+   var sobretasa = formcal.sobretasa.value;
+   if(cual == 1 || cual == 3){
+     if (sobretasa < 0){
+      formcal.tasaRendimiento.value = Math.abs(formcal.tasaMercado.value) - Math.abs(formcal.sobretasa.value);
+     }else{
+      formcal.tasaRendimiento.value = Math.abs(formcal.tasaMercado.value) + Math.abs(formcal.sobretasa.value);
+     }
+   }
+   else {
+      if(cual == 2 || cual == 3){
+         formcal.sobretasa.value = Math.abs(formcal.tasaRendimiento.value) - Math.abs(formcal.tasaMercado.value);
+      }
+      if(cual == 1 || cual == 2){
+        if (sobretasa < 0){
+         formcal.tasaMercado.value = Math.abs(formcal.tasaRendimiento.value) + Math.abs(formcal.sobretasa.value);
+        }else{
+         formcal.tasaMercado.value = Math.abs(formcal.tasaRendimiento.value) - Math.abs(formcal.sobretasa.value);
+        }
+      }
+   }
+}
+
+function despliega_Calendario(){
+    setDateField(document.formcal.fecha);newWin = window.open('/VAL/Web_Benchmarks/Calendario.html','cal','dependent=yes,width=210,height=230,screenX=200,screenY=300,titlebar=no');
+}
+</script>
+<script languaje="JavaScript">
+
+function cambiaImagen(img, indice) {
+     if (indice==1){
+        img.src="/VAL/Web_Benchmarks/GRA/calculadora_2.jpg";
+     }
+     if (indice==2){
+        img.src="/VAL/Web_Benchmarks/GRA/historico_2.jpg";
+     }
+     if (indice==3){
+        img.src="/VAL/Web_Benchmarks/GRA/caracteristicas_2.jpg";
+     }
+     if (indice==4){
+        img.src="/VAL/Web_Benchmarks/GRA/regresar_2.jpg";
+     }
+}
+
+function regresaImagen(img,indice) {
+     if (indice==1){
+        img.src="/VAL/Web_Benchmarks/GRA/calculadora.jpg";
+     }
+     if (indice==2){
+        img.src="/VAL/Web_Benchmarks/GRA/historico.jpg";
+     }
+     if (indice==3){
+        img.src="/VAL/Web_Benchmarks/GRA/caracteristicas.jpg";
+     }
+     if (indice==4){
+        img.src="/VAL/Web_Benchmarks/GRA/regresar.jpg";
+     }
+}
+</script>
+<script language="JavaScript">
+
+// SPECIFY DATE FORMAT RETURNED BY THIS CALENDAR
+
+// (THIS IS ALSO THE DATE FORMAT RECOGNIZED BY THIS CALENDAR)
+
+
+
+// DATE FORMAT OPTIONS:
+
+//
+
+// dd   = 1 or 2-digit Day
+
+// DD   = 2-digit Day
+
+// mm   = 1 or 2-digit Month
+
+// MM   = 2-digit Month
+
+// yy   = 2-digit Year
+
+// YY   = 4-digit Year
+
+// yyyy = 4-digit Year
+
+// month   = Month name in lowercase letters
+
+// Month   = Month name in initial caps
+
+// MONTH   = Month name in captital letters
+
+// mon     = 3-letter month abbreviation in lowercase letters
+
+// Mon     = 3-letter month abbreviation in initial caps
+
+// MON     = 3-letter month abbreviation in uppercase letters
+
+// weekday = name of week in lowercase letters
+
+// Weekday = name of week in initial caps
+
+// WEEKDAY = name of week in uppercase letters
+
+// wkdy    = 3-letter weekday abbreviation in lowercase letters
+
+// Wkdy    = 3-letter weekday abbreviation in initial caps
+
+// WKDY    = 3-letter weekday abbreviation in uppercase letters
+
+//
+
+// Examples:
+
+//
+
+// calDateFormat = "mm/dd/yy";
+
+// calDateFormat = "Weekday, Month dd, yyyy";
+
+// calDateFormat = "wkdy, mon dd, yyyy";
+
+// calDateFormat = "DD.MM.YY";     // FORMAT UNSUPPORTED BY JAVASCRIPT -- REQUIRES CUSTOM PARSING
+
+//
+
+
+
+calDateFormat    = "yyyy/MM/DD";
+
+
+
+
+
+// CALENDAR COLORS
+
+topBackground    = "#F1F2F2";         // BG COLOR OF THE TOP FRAME
+
+bottomBackground = "#F1F2F2";         // BG COLOR OF THE BOTTOM FRAME
+
+tableBGColor     = "#E1C266";         // BG COLOR OF THE BOTTOM FRAME'S TABLE
+
+cellColor        = "#F5ECCF";     // TABLE CELL BG COLOR OF THE DATE CELLS IN THE BOTTOM FRAME
+
+headingCellColor = "#000000";         // TABLE CELL BG COLOR OF THE WEEKDAY ABBREVIATIONS
+
+headingTextColor = "#CC9900";         // TEXT COLOR OF THE WEEKDAY ABBREVIATIONS
+
+dateColor        = "#000000";          // TEXT COLOR OF THE LISTED DATES (1-28+)
+
+focusColor       = "CC9900";       // TEXT COLOR OF THE SELECTED DATE (OR CURRENT DATE)
+
+dianohabilColor       = "F1F1F2";       // TEXT COLOR OF THE SELECTED DATE (OR CURRENT DATE)
+
+hoverColor       = "blue";       // TEXT COLOR OF A LINK WHEN YOU HOVER OVER IT
+
+fontStyle        = "10pt helvetica";           // TEXT STYLE FOR DATES
+
+headingFontStyle = "bold 10pt helvetica";      // TEXT STYLE FOR WEEKDAY ABBREVIATIONS
+
+
+
+// FORMATTING PREFERENCES
+
+bottomBorder  = false;        // TRUE/FALSE (WHETHER TO DISPLAY BOTTOM CALENDAR BORDER)
+
+tableBorder   = 1;            // SIZE OF CALENDAR TABLE BORDER (BOTTOM FRAME) 0=none
+
+
+
+
+
+
+
+// END USER-EDITABLE SECTION -------------------------------------------------------
+
+
+
+
+
+
+
+// DETERMINE BROWSER BRAND
+
+var isNav = false;
+
+var isIE  = false;
+
+
+
+// ASSUME IT'S EITHER NETSCAPE OR MSIE
+
+if (navigator.appName == "Netscape") {
+
+    isNav = true;
+
+}
+
+else {
+
+    isIE = true;
+
+}
+
+
+
+// GET CURRENTLY SELECTED LANGUAGE
+
+selectedLanguage = navigator.language;
+
+
+
+// PRE-BUILD PORTIONS OF THE CALENDAR WHEN THIS JS LIBRARY LOADS INTO THE BROWSER
+
+buildCalParts();
+
+
+
+
+
+
+
+// CALENDAR FUNCTIONS BEGIN HERE ---------------------------------------------------
+
+
+
+
+
+
+
+// SET THE INITIAL VALUE OF THE GLOBAL DATE FIELD
+
+function setDateField(dateField) {
+
+
+
+    // ASSIGN THE INCOMING FIELD OBJECT TO A GLOBAL VARIABLE
+
+    calDateField = dateField;
+
+
+
+    // GET THE VALUE OF THE INCOMING FIELD
+
+
+
+    inDate = dateField.value;
+
+
+
+    // SET calDate TO THE DATE IN THE INCOMING FIELD OR DEFAULT TO TODAY'S DATE
+
+    setInitialDate();
+
+
+
+    // THE CALENDAR FRAMESET DOCUMENTS ARE CREATED BY JAVASCRIPT FUNCTIONS
+
+    calDocTop    = buildTopCalFrame();
+
+    calDocBottom = buildBottomCalFrame();
+
+}
+
+
+
+
+
+// SET THE INITIAL CALENDAR DATE TO TODAY OR TO THE EXISTING VALUE IN dateField
+
+function setInitialDate() {
+
+   
+
+    // CREATE A NEW DATE OBJECT (WILL GENERALLY PARSE CORRECT DATE EXCEPT WHEN "." IS USED AS A DELIMITER)
+
+    // (THIS ROUTINE DOES *NOT* CATCH ALL DATE FORMATS, IF YOU NEED TO PARSE A CUSTOM DATE FORMAT, DO IT HERE)
+
+    calDate = new Date(inDate);
+
+
+
+    // IF THE INCOMING DATE IS INVALID, USE THE CURRENT DATE
+
+    if (isNaN(calDate)) {
+
+
+
+        // ADD CUSTOM DATE PARSING HERE
+
+        // IF IT FAILS, SIMPLY CREATE A NEW DATE OBJECT WHICH DEFAULTS TO THE CURRENT DATE
+
+        calDate = new Date();
+
+    }
+
+    if (calDate.getFullYear() == '1900') {
+
+      calDate.setFullYear(2000);
+
+    }
+
+
+
+    // KEEP TRACK OF THE CURRENT DAY VALUE
+
+    calDay  = calDate.getDate();
+
+
+
+    // SET DAY VALUE TO 1... TO AVOID JAVASCRIPT DATE CALCULATION ANOMALIES
+
+    // (IF THE MONTH CHANGES TO FEB AND THE DAY IS 30, THE MONTH WOULD CHANGE TO MARCH
+
+    //  AND THE DAY WOULD CHANGE TO 2.  SETTING THE DAY TO 1 WILL PREVENT THAT)
+
+    calDate.setDate(1);
+
+}
+
+
+
+
+
+// POPUP A WINDOW WITH THE CALENDAR IN IT
+
+function showCalendar(dateField) {
+
+
+
+    // SET INITIAL VALUE OF THE DATE FIELD AND CREATE TOP AND BOTTOM FRAMES
+
+    setDateField(dateField);
+
+
+
+    // USE THE JAVASCRIPT-GENERATED DOCUMENTS (calDocTop, calDocBottom) IN THE FRAMESET
+
+    calDocFrameset = 
+
+        "<HTML><HEAD><TITLE>Calendario</TITLE></HEAD>\n" +
+
+        "<FRAMESET ROWS='70,*' FRAMEBORDER='0'>\n" +
+
+        "  <FRAME NAME='topCalFrame' SRC='javascript:parent.opener.calDocTop' SCROLLING='no'>\n" +
+
+        "  <FRAME NAME='bottomCalFrame' SRC='javascript:parent.opener.calDocBottom' SCROLLING='no'>\n" +
+
+        "</FRAMESET>\n";
+
+
+
+    // DISPLAY THE CALENDAR IN A NEW POPUP WINDOW
+
+    top.newWin = window.open("javascript:parent.opener.calDocFrameset", "calWin", winPrefs);
+
+    top.newWin.focus();
+
+}
+
+
+
+
+
+// CREATE THE TOP CALENDAR FRAME
+
+function buildTopCalFrame() {
+
+
+
+    // CREATE THE TOP FRAME OF THE CALENDAR
+
+    var calDoc =
+
+        "<HTML>" +
+
+        "<HEAD>" +
+
+//	 "<STYLE TYPE='text/css'>" +
+
+//	 "<!--" +
+
+//	 "A.menus { color: #CC3333; text-decoration: none; font-size: xx-small; }" +
+
+//	 "A.menus:visited { color: #CC3333; text-decoration: none; font-size: xx-small; }" +
+
+//	 "A.menus:hover { text-decoration: none; color: #CC3333; background: #ffa; font-size: xx-small; }" +
+
+//	 "-->" +
+
+//	 "</STYLE>" +        
+
+        "</HEAD>" +
+
+        "<BODY BGCOLOR='" + topBackground + "'>" +
+
+        "<FORM NAME='calControl' onSubmit='return false;'>" +
+
+        "<CENTER>" +
+
+        "<TABLE CELLPADDING=0 CELLSPACING=0 BORDER=0>" +
+
+        "<TR><TD COLSPAN=7>" +
+
+        "<CENTER>" +
+
+        getMonthSelect() +
+
+        "<INPUT NAME='year' VALUE='" + calDate.getFullYear() + "'TYPE=TEXT SIZE=4 MAXLENGTH=4 onChange='parent.opener.setYear()'>" +
+
+        "</CENTER>" +
+
+        "</TD>" +
+
+        "</TR>" +
+
+        "<TR>" +
+
+        "<TD COLSPAN=7>" +
+
+        "<FONT font-family: Helvetica; font-size: 10pt; font-weight: bold; color: #330066>" +
+
+        "<INPUT " +
+
+//        "TYPE=BUTTON NAME='previousYear' VALUE='<Año'    onClick='parent.opener.setPreviousYear()'><INPUT " +
+
+//        "TYPE=BUTTON NAME='previousMonth' VALUE='<Mes'   onClick='parent.opener.setPreviousMonth()'><INPUT " +
+
+//        "TYPE=BUTTON NAME='today' VALUE='Hoy' onClick='parent.opener.setToday()'><INPUT " +
+
+//        "TYPE=BUTTON NAME='nextMonth' VALUE='Mes>'   onClick='parent.opener.setNextMonth()'><INPUT " +
+
+//        "TYPE=BUTTON NAME='nextYear' VALUE='Año>'    onClick='parent.opener.setNextYear()'>" +
+
+        "TYPE=BUTTON border-color: '#E1C266' '#CC9900'; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: '#CC9900'; font-family: Helvetica; font-size: 10pt; font-weight: bold; color: '#330066' NAME='today' VALUE='Hoy' onClick='parent.opener.setToday()'><INPUT " +
+
+        "TYPE=BUTTON border-color: '#E1C266' '#CC9900'; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: '#CC9900'; font-family: Helvetica; font-size: 10pt; font-weight: bold; color: '#330066' NAME='previousMonth' VALUE='<'   onClick='parent.opener.setPreviousMonth()'> Mes <INPUT " +
+
+        "TYPE=BUTTON border-color: '#E1C266' '#CC9900'; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: '#CC9900'; font-family: Helvetica; font-size: 10pt; font-weight: bold; color: '#330066' NAME='nextMonth' VALUE='>'   onClick='parent.opener.setNextMonth()'><INPUT " +
+
+        "TYPE=BUTTON border-color: '#E1C266' '#CC9900'; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: '#CC9900'; font-family: Helvetica; font-size: 10pt; font-weight: bold; color: '#330066' NAME='previousYear' VALUE='<'    onClick='parent.opener.setPreviousYear()'> Año <INPUT " +
+
+        "TYPE=BUTTON border-color: '#E1C266' '#CC9900'; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: '#CC9900'; font-family: Helvetica; font-size: 10pt; font-weight: bold; color: '#330066' NAME='nextYear' VALUE='>'    onClick='parent.opener.setNextYear()'>" +
+
+        "</FONT>" +
+
+        "</TD>" +
+
+        "</TR>" +
+
+        "</TABLE>" +
+
+        "</CENTER>" +
+
+        "</FORM>" +
+
+        "</BODY>" +
+
+        "</HTML>";
+
+
+
+    return calDoc;
+
+}
+
+
+
+
+
+// CREATE THE BOTTOM CALENDAR FRAME 
+
+// (THE MONTHLY CALENDAR)
+
+function buildBottomCalFrame() {       
+
+
+
+    // START CALENDAR DOCUMENT
+
+    var calDoc = calendarBegin;
+
+
+
+    // GET MONTH, AND YEAR FROM GLOBAL CALENDAR DATE
+
+    month   = calDate.getMonth();
+
+    year    = calDate.getFullYear();
+
+
+
+
+
+    // GET GLOBALLY-TRACKED DAY VALUE (PREVENTS JAVASCRIPT DATE ANOMALIES)
+
+    day     = calDay;
+
+
+
+    var i   = 0;
+
+
+
+    // DETERMINE THE NUMBER OF DAYS IN THE CURRENT MONTH
+
+    var days = getDaysInMonth();
+
+
+
+    // IF GLOBAL DAY VALUE IS > THAN DAYS IN MONTH, HIGHLIGHT LAST DAY IN MONTH
+
+    if (day > days) {
+
+        day = days;
+
+    }
+
+
+
+    // DETERMINE WHAT DAY OF THE WEEK THE CALENDAR STARTS ON
+
+    var firstOfMonth = new Date (year, month, 1);
+
+
+
+    // GET THE DAY OF THE WEEK THE FIRST DAY OF THE MONTH FALLS ON
+
+    var startingPos  = firstOfMonth.getDay();
+
+    days += startingPos;
+
+
+
+    // KEEP TRACK OF THE COLUMNS, START A NEW ROW AFTER EVERY 7 COLUMNS
+
+    var columnCount = 0;
+
+
+
+    // MAKE BEGINNING NON-DATE CELLS BLANK
+
+    for (i = 0; i < startingPos; i++) {
+
+
+
+        calDoc += blankCell;
+
+	columnCount++;
+
+    }
+
+
+
+    // SET VALUES FOR DAYS OF THE MONTH
+
+    var currentDay = 0;
+
+    var dayType    = "weekday";
+
+
+
+    // DATE CELLS CONTAIN A NUMBER
+
+    for (i = startingPos; i < days; i++) {
+
+
+
+	var paddingChar = "&nbsp;";
+
+
+
+        // ADJUST SPACING SO THAT ALL LINKS HAVE RELATIVELY EQUAL WIDTHS
+
+        if (i-startingPos+1 < 10) {
+
+            padding = "&nbsp;&nbsp;";
+
+        }
+
+        else {
+
+            padding = "&nbsp;";
+
+        }
+
+
+
+        // GET THE DAY CURRENTLY BEING WRITTEN
+
+        currentDay = i-startingPos+1;
+
+
+
+	//OBTIENE EL DIA DE LA SEMANA
+
+        var fecha = new Date (year, month, currentDay);
+
+        var weekday       = weekdayList[fecha.getDay()];
+
+        var weekdayAbbrev = weekday.substring(0,3);
+
+
+
+        // SET THE TYPE OF DAY, THE focusDay GENERALLY APPEARS AS A DIFFERENT COLOR
+
+        if (currentDay == day) {
+
+            dayType = "focusDay";
+
+        }
+
+        else {
+
+	  if (weekdayAbbrev == "Dom" || weekdayAbbrev == "Sab" ){
+
+            dayType = "dianohabil";
+
+	  }else{
+
+            dayType = "weekDay";
+
+          }
+
+        }
+
+
+
+        // ADD THE DAY TO THE CALENDAR STRING
+
+	if (dayType == "dianohabil"){
+
+          calDoc += "<TD align=center bgcolor='" + dianohabilColor + "'>" +
+
+                    padding + currentDay + paddingChar + "</TD>";
+
+	}else{
+
+          calDoc += "<TD align=center bgcolor='" + cellColor + "'>" +
+
+  //                  "<A CLASS='menus' href='javascript:parent.opener.returnDate(" + 
+
+  // AQUI MODIFIQUE EL CODIGO PARA VER SI SE PUEDE QUITAR LA LIGA        
+
+                    "<a class='" + dayType + "' href='javascript:parent.opener.returnDate(" + 
+
+                    currentDay + ")'>" + padding + currentDay + paddingChar + "</a></TD>";
+
+         }
+
+
+
+        columnCount++;
+
+
+
+        // START A NEW ROW WHEN NECESSARY
+
+        if (columnCount % 7 == 0) {
+
+            calDoc += "</TR><TR>";
+
+        }
+
+    }
+
+
+
+    // MAKE REMAINING NON-DATE CELLS BLANK
+
+    for (i=days; i<42; i++)  {
+
+
+
+        calDoc += blankCell;
+
+	columnCount++;
+
+
+
+        // START A NEW ROW WHEN NECESSARY
+
+        if (columnCount % 7 == 0) {
+
+            calDoc += "</TR>";
+
+            if (i<41) {
+
+                calDoc += "<TR>";
+
+            }
+
+        }
+
+    }
+
+
+
+    // FINISH THE NEW CALENDAR PAGE
+
+    calDoc += calendarEnd;
+
+
+
+    // RETURN THE COMPLETED CALENDAR PAGE
+
+    return calDoc;
+
+}
+
+
+
+
+
+// WRITE THE MONTHLY CALENDAR TO THE BOTTOM CALENDAR FRAME
+
+function writeCalendar() {
+
+
+
+    // CREATE THE NEW CALENDAR FOR THE SELECTED MONTH & YEAR
+
+    calDocBottom = buildBottomCalFrame();
+
+
+
+    // WRITE THE NEW CALENDAR TO THE BOTTOM FRAME
+
+    top.newWin.frames['bottomCalFrame'].document.open();
+
+    top.newWin.frames['bottomCalFrame'].document.write(calDocBottom);
+
+    top.newWin.frames['bottomCalFrame'].document.close();
+
+}
+
+
+
+
+
+// SET THE CALENDAR TO TODAY'S DATE AND DISPLAY THE NEW CALENDAR
+
+function setToday() {
+
+
+
+    // SET GLOBAL DATE TO TODAY'S DATE
+
+    calDate = new Date();
+
+
+
+    // SET DAY MONTH AND YEAR TO TODAY'S DATE
+
+    var month = calDate.getMonth();
+
+    var year  = calDate.getFullYear();
+
+
+
+    // SET MONTH IN DROP-DOWN LIST
+
+    top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex = month;
+
+
+
+    // SET YEAR VALUE
+
+    top.newWin.frames['topCalFrame'].document.calControl.year.value = year;
+
+
+
+    // DISPLAY THE NEW CALENDAR
+
+    writeCalendar();
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE NEWLY ENTERED YEAR AND REDRAW THE CALENDAR
+
+function setYear() {
+
+
+
+    // GET THE NEW YEAR VALUE
+
+    var year  = top.newWin.frames['topCalFrame'].document.calControl.year.value;
+
+
+
+    // IF IT'S A FOUR-DIGIT YEAR THEN CHANGE THE CALENDAR
+
+    if (isFourDigitYear(year)) {
+
+        calDate.setFullYear(year);
+
+        writeCalendar();
+
+    }
+
+    else {
+
+        // HIGHLIGHT THE YEAR IF THE YEAR IS NOT FOUR DIGITS IN LENGTH
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.focus();
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.select();
+
+    }
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE SELECTED MONTH AND REDRAW THE CALENDAR
+
+function setCurrentMonth() {
+
+
+
+    // GET THE NEWLY SELECTED MONTH AND CHANGE THE CALENDAR ACCORDINGLY
+
+    var month = top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex;
+
+
+
+    calDate.setMonth(month);
+
+    writeCalendar();
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE PREVIOUS YEAR AND REDRAW THE CALENDAR
+
+function setPreviousYear() {
+
+
+
+    var year  = top.newWin.frames['topCalFrame'].document.calControl.year.value;
+
+
+
+    if (isFourDigitYear(year) && year > 1000) {
+
+        year--;
+
+        calDate.setFullYear(year);
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.value = year;
+
+        writeCalendar();
+
+    }
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE PREVIOUS MONTH AND REDRAW THE CALENDAR
+
+function setPreviousMonth() {
+
+
+
+    var year  = top.newWin.frames['topCalFrame'].document.calControl.year.value;
+
+    if (isFourDigitYear(year)) {
+
+        var month = top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex;
+
+
+
+        // IF MONTH IS JANUARY, SET MONTH TO DECEMBER AND DECREMENT THE YEAR
+
+        if (month == 0) {
+
+            month = 11;
+
+            if (year > 1000) {
+
+                year--;
+
+                calDate.setFullYear(year);
+
+                top.newWin.frames['topCalFrame'].document.calControl.year.value = year;
+
+            }
+
+        }
+
+        else {
+
+            month--;
+
+        }
+
+        calDate.setMonth(month);
+
+        top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex = month;
+
+        writeCalendar();
+
+    }
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE NEXT MONTH AND REDRAW THE CALENDAR
+
+function setNextMonth() {
+
+
+
+    var year = top.newWin.frames['topCalFrame'].document.calControl.year.value;
+
+
+
+    if (isFourDigitYear(year)) {
+
+        var month = top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex;
+
+
+
+        // IF MONTH IS DECEMBER, SET MONTH TO JANUARY AND INCREMENT THE YEAR
+
+        if (month == 11) {
+
+            month = 0;
+
+            year++;
+
+            calDate.setFullYear(year);
+
+            top.newWin.frames['topCalFrame'].document.calControl.year.value = year;
+
+        }
+
+        else {
+
+            month++;
+
+        }
+
+        calDate.setMonth(month);
+
+        top.newWin.frames['topCalFrame'].document.calControl.month.selectedIndex = month;
+
+        writeCalendar();
+
+    }
+
+}
+
+
+
+
+
+// SET THE GLOBAL DATE TO THE NEXT YEAR AND REDRAW THE CALENDAR
+
+function setNextYear() {
+
+
+
+    var year  = top.newWin.frames['topCalFrame'].document.calControl.year.value;
+
+    if (isFourDigitYear(year)) {
+
+        year++;
+
+        calDate.setFullYear(year);
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.value = year;
+
+        writeCalendar();
+
+    }
+
+}
+
+
+
+
+
+// GET NUMBER OF DAYS IN MONTH
+
+function getDaysInMonth()  {
+
+
+
+    var days;
+
+    var month = calDate.getMonth()+1;
+
+    var year  = calDate.getFullYear();
+
+
+
+    // RETURN 31 DAYS
+
+    if (month==1 || month==3 || month==5 || month==7 || month==8 ||
+
+        month==10 || month==12)  {
+
+        days=31;
+
+    }
+
+    // RETURN 30 DAYS
+
+    else if (month==4 || month==6 || month==9 || month==11) {
+
+        days=30;
+
+    }
+
+    // RETURN 29 DAYS
+
+    else if (month==2)  {
+
+        if (isLeapYear(year)) {
+
+            days=29;
+
+        }
+
+        // RETURN 28 DAYS
+
+        else {
+
+            days=28;
+
+        }
+
+    }
+
+    return (days);
+
+}
+
+
+
+
+
+// CHECK TO SEE IF YEAR IS A LEAP YEAR
+
+function isLeapYear (Year) {
+
+
+
+    if (((Year % 4)==0) && ((Year % 100)!=0) || ((Year % 400)==0)) {
+
+        return (true);
+
+    }
+
+    else {
+
+        return (false);
+
+    }
+
+}
+
+
+
+
+
+// ENSURE THAT THE YEAR IS FOUR DIGITS IN LENGTH
+
+function isFourDigitYear(year) {
+
+
+
+    if (year.length != 4) {
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.value = calDate.getFullYear();
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.select();
+
+        top.newWin.frames['topCalFrame'].document.calControl.year.focus();
+
+    }
+
+    else {
+
+        return true;
+
+    }
+
+}
+
+
+
+
+
+// BUILD THE MONTH SELECT LIST
+
+function getMonthSelect() {
+
+
+
+    // BROWSER LANGUAGE CHECK DONE PREVIOUSLY (navigator.language())
+
+    // FIRST TWO CHARACTERS OF LANGUAGE STRING SPECIFIES THE LANGUAGE
+
+    // (THE LAST THREE OPTIONAL CHARACTERS SPECIFY THE LANGUAGE SUBTYPE)
+
+    // SET THE NAMES OF THE MONTH TO THE PROPER LANGUAGE (DEFAULT TO ENGLISH)
+
+
+
+    // IF FRENCH
+
+    if (selectedLanguage == "fr") {
+
+        monthArray = new Array('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+
+                               'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
+
+    }
+
+    // IF GERMAN
+
+    else if (selectedLanguage == "de") {
+
+        monthArray = new Array('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+
+                               'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
+
+    }
+
+    // IF SPANISH
+
+    else if (selectedLanguage == "es") {
+
+        monthArray = new Array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+
+                               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+    }
+
+    // DEFAULT TO ENGLISH
+
+    else {
+
+        monthArray = new Array('January', 'February', 'March', 'April', 'May', 'June',
+
+                               'July', 'August', 'September', 'October', 'November', 'December');
+
+    }
+
+    
+
+    monthArray = new Array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+
+
+    // DETERMINE MONTH TO SET AS DEFAULT
+
+    var activeMonth = calDate.getMonth();
+
+
+
+    // START HTML SELECT LIST ELEMENT
+
+    monthSelect = "<SELECT NAME='month'border-color: #CC9900 #E1C266; border-style: solid; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background: #F1F2F2; color: #330066; font-family: Helvetica; font-size: 10pt; font-weight: bold  onChange='parent.opener.setCurrentMonth()'>";
+
+
+
+    // LOOP THROUGH MONTH ARRAY
+
+    for (i in monthArray) {
+
+        
+
+        // SHOW THE CORRECT MONTH IN THE SELECT LIST
+
+        if (i == activeMonth) {
+
+            monthSelect += "<OPTION SELECTED>" + monthArray[i] + "\n";
+
+        }
+
+        else {
+
+            monthSelect += "<OPTION>" + monthArray[i] + "\n";
+
+        }
+
+    }
+
+    monthSelect += "</SELECT>";
+
+
+
+    // RETURN A STRING VALUE WHICH CONTAINS A SELECT LIST OF ALL 12 MONTHS
+
+    return monthSelect;
+
+}
+
+
+
+
+
+// SET DAYS OF THE WEEK DEPENDING ON LANGUAGE
+
+function createWeekdayList() {
+
+
+
+    // IF FRENCH
+
+    if (selectedLanguage == "fr") {
+
+        weekdayList  = new Array('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi');
+
+        weekdayArray = new Array('Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa');
+
+    }
+
+    // IF GERMAN
+
+    else if (selectedLanguage == "de") {
+
+        weekdayList  = new Array('Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag');
+
+        weekdayArray = new Array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
+
+    }
+
+    // IF SPANISH
+
+    else if (selectedLanguage == "es") {
+
+        weekdayList  = new Array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sabado')
+
+        weekdayArray = new Array('Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa');
+
+    }
+
+    else {
+
+        weekdayList  = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+
+        weekdayArray = new Array('Su','Mo','Tu','We','Th','Fr','Sa');
+
+    }
+
+
+
+    weekdayList  = new Array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sabado')
+
+    weekdayArray = new Array('Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa');
+
+
+
+    // START HTML TO HOLD WEEKDAY NAMES IN TABLE FORMAT
+
+    var weekdays = "<TR BGCOLOR='" + headingCellColor + "'>";
+
+
+
+    // LOOP THROUGH WEEKDAY ARRAY
+
+    for (i in weekdayArray) {
+
+
+
+        weekdays += "<TD class='heading' align=center>" + weekdayArray[i] + "</TD>";
+
+    }
+
+    weekdays += "</TR>";
+
+
+
+    // RETURN TABLE ROW OF WEEKDAY ABBREVIATIONS TO DISPLAY ABOVE THE CALENDAR
+
+    return weekdays;
+
+}
+
+
+
+
+
+// PRE-BUILD PORTIONS OF THE CALENDAR (FOR PERFORMANCE REASONS)
+
+function buildCalParts() {
+
+
+
+    // GENERATE WEEKDAY HEADERS FOR THE CALENDAR
+
+    weekdays = createWeekdayList();
+
+
+
+    // BUILD THE BLANK CELL ROWS
+
+    blankCell = "<TD align=center bgcolor='" + cellColor + "'>&nbsp;&nbsp;&nbsp;</TD>";
+
+
+
+    // BUILD THE TOP PORTION OF THE CALENDAR PAGE USING CSS TO CONTROL SOME DISPLAY ELEMENTS
+
+    calendarBegin =
+
+        "<HTML>" +
+
+        "<HEAD>" +
+
+        // STYLESHEET DEFINES APPEARANCE OF CALENDAR
+
+        "<STYLE type='text/css'>" +
+
+        "<!--" +
+
+        "TD.heading { text-decoration: none; color:" + headingTextColor + "; font: " + headingFontStyle + "; }" +
+
+        "A.focusDay:link { color: " + focusColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.focusDay:hover { color: " + focusColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.focusDay:visited { color: " + focusColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.weekday:link { color: " + dateColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.weekday:hover { color: " + hoverColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.weekday:visited { color: " + dateColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.dianohabil:link { color: " + dianohabilColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.dianohabil:hover { color: " + dianohabilColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "A.dianohabil:visited { color: " + dianohabilColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+
+        "-->" +
+
+        "</STYLE>" +
+
+        "</HEAD>" +
+
+        "<BODY BGCOLOR='" + bottomBackground + "'" +
+
+        "<CENTER>";
+
+
+
+        // NAVIGATOR NEEDS A TABLE CONTAINER TO DISPLAY THE TABLE OUTLINES PROPERLY
+
+        if (isNav) {
+
+            calendarBegin += 
+
+                "<TABLE CELLPADDING=0 CELLSPACING=1 BORDER=" + tableBorder + " ALIGN=CENTER BGCOLOR='" + tableBGColor + "'><TR><TD>";
+
+        }
+
+
+
+        // BUILD WEEKDAY HEADINGS
+
+        calendarBegin +=
+
+            "<TABLE CELLPADDING=0 CELLSPACING=1 BORDER=" + tableBorder + " ALIGN=CENTER BGCOLOR='" + tableBGColor + "'>" +
+
+            weekdays +
+
+            "<TR>";
+
+
+
+
+
+    // BUILD THE BOTTOM PORTION OF THE CALENDAR PAGE
+
+    calendarEnd = "";
+
+
+
+        // WHETHER OR NOT TO DISPLAY A THICK LINE BELOW THE CALENDAR
+
+        if (bottomBorder) {
+
+            calendarEnd += "<TR></TR>";
+
+        }
+
+
+
+        // NAVIGATOR NEEDS A TABLE CONTAINER TO DISPLAY THE BORDERS PROPERLY
+
+        if (isNav) {
+
+            calendarEnd += "</TD></TR></TABLE>";
+
+        }
+
+
+
+        // END THE TABLE AND HTML DOCUMENT
+
+        calendarEnd +=
+
+            "</TABLE>" +
+
+            "</CENTER>" +
+
+            "</BODY>" +
+
+            "</HTML>";
+
+}
+
+
+
+
+
+// REPLACE ALL INSTANCES OF find WITH replace
+
+// inString: the string you want to convert
+
+// find:     the value to search for
+
+// replace:  the value to substitute
+
+//
+
+// usage:    jsReplace(inString, find, replace);
+
+// example:  jsReplace("To be or not to be", "be", "ski");
+
+//           result: "To ski or not to ski"
+
+//
+
+function jsReplace(inString, find, replace) {
+
+
+
+    var outString = "";
+
+
+
+    if (!inString) {
+
+        return "";
+
+    }
+
+
+
+    // REPLACE ALL INSTANCES OF find WITH replace
+
+    if (inString.indexOf(find) != -1) {
+
+        // SEPARATE THE STRING INTO AN ARRAY OF STRINGS USING THE VALUE IN find
+
+        t = inString.split(find);
+
+
+
+        // JOIN ALL ELEMENTS OF THE ARRAY, SEPARATED BY THE VALUE IN replace
+
+        return (t.join(replace));
+
+    }
+
+    else {
+
+        return inString;
+
+    }
+
+}
+
+
+
+
+
+// JAVASCRIPT FUNCTION -- DOES NOTHING (USED FOR THE HREF IN THE CALENDAR CALL)
+
+function doNothing() {
+
+}
+
+
+
+
+
+// ENSURE THAT VALUE IS TWO DIGITS IN LENGTH
+
+function makeTwoDigit(inValue) {
+
+
+
+    var numVal = parseInt(inValue, 10);
+
+
+
+    // VALUE IS LESS THAN TWO DIGITS IN LENGTH
+
+    if (numVal < 10) {
+
+
+
+        // ADD A LEADING ZERO TO THE VALUE AND RETURN IT
+
+        return("0" + numVal);
+
+    }
+
+    else {
+
+        return numVal;
+
+    }
+
+}
+
+
+
+
+
+// SET FIELD VALUE TO THE DATE SELECTED AND CLOSE THE CALENDAR WINDOW
+
+function returnDate(inDay)
+
+{
+
+
+
+    // inDay = THE DAY THE USER CLICKED ON
+
+    calDate.setDate(inDay);
+
+
+
+    // SET THE DATE RETURNED TO THE USER
+
+    var day           = calDate.getDate();
+
+    var month         = calDate.getMonth()+1;
+
+    var year          = calDate.getFullYear();
+
+    var monthString   = monthArray[calDate.getMonth()];
+
+    var monthAbbrev   = monthString.substring(0,3);
+
+    var weekday       = weekdayList[calDate.getDay()];
+
+    var weekdayAbbrev = weekday.substring(0,3);
+
+
+
+    outDate = calDateFormat;
+
+
+
+    // RETURN TWO DIGIT DAY
+
+    if (calDateFormat.indexOf("DD") != -1) {
+
+        day = makeTwoDigit(day);
+
+        outDate = jsReplace(outDate, "DD", day);
+
+    }
+
+    // RETURN ONE OR TWO DIGIT DAY
+
+    else if (calDateFormat.indexOf("dd") != -1) {
+
+        outDate = jsReplace(outDate, "dd", day);
+
+    }
+
+
+
+    // RETURN TWO DIGIT MONTH
+
+    if (calDateFormat.indexOf("MM") != -1) {
+
+        month = makeTwoDigit(month);
+
+        outDate = jsReplace(outDate, "MM", month);
+
+    }
+
+    // RETURN ONE OR TWO DIGIT MONTH
+
+    else if (calDateFormat.indexOf("mm") != -1) {
+
+        outDate = jsReplace(outDate, "mm", month);
+
+    }
+
+
+
+    // RETURN FOUR-DIGIT YEAR
+
+    if (calDateFormat.indexOf("yyyy") != -1) {
+
+        outDate = jsReplace(outDate, "yyyy", year);
+
+    }
+
+    // RETURN TWO-DIGIT YEAR
+
+    else if (calDateFormat.indexOf("yy") != -1) {
+
+        var yearString = "" + year;
+
+        var yearString = yearString.substring(2,4);
+
+        outDate = jsReplace(outDate, "yy", yearString);
+
+    }
+
+    // RETURN FOUR-DIGIT YEAR
+
+    else if (calDateFormat.indexOf("YY") != -1) {
+
+        outDate = jsReplace(outDate, "YY", year);
+
+    }
+
+
+
+    // RETURN DAY OF MONTH (Initial Caps)
+
+    if (calDateFormat.indexOf("Month") != -1) {
+
+        outDate = jsReplace(outDate, "Month", monthString);
+
+    }
+
+    // RETURN DAY OF MONTH (lowercase letters)
+
+    else if (calDateFormat.indexOf("month") != -1) {
+
+        outDate = jsReplace(outDate, "month", monthString.toLowerCase());
+
+    }
+
+    // RETURN DAY OF MONTH (UPPERCASE LETTERS)
+
+    else if (calDateFormat.indexOf("MONTH") != -1) {
+
+        outDate = jsReplace(outDate, "MONTH", monthString.toUpperCase());
+
+    }
+
+
+
+    // RETURN DAY OF MONTH 3-DAY ABBREVIATION (Initial Caps)
+
+    if (calDateFormat.indexOf("Mon") != -1) {
+
+        outDate = jsReplace(outDate, "Mon", monthAbbrev);
+
+    }
+
+    // RETURN DAY OF MONTH 3-DAY ABBREVIATION (lowercase letters)
+
+    else if (calDateFormat.indexOf("mon") != -1) {
+
+        outDate = jsReplace(outDate, "mon", monthAbbrev.toLowerCase());
+
+    }
+
+    // RETURN DAY OF MONTH 3-DAY ABBREVIATION (UPPERCASE LETTERS)
+
+    else if (calDateFormat.indexOf("MON") != -1) {
+
+        outDate = jsReplace(outDate, "MON", monthAbbrev.toUpperCase());
+
+    }
+
+
+
+    // RETURN WEEKDAY (Initial Caps)
+
+    if (calDateFormat.indexOf("Weekday") != -1) {
+
+        outDate = jsReplace(outDate, "Weekday", weekday);
+
+    }
+
+    // RETURN WEEKDAY (lowercase letters)
+
+    else if (calDateFormat.indexOf("weekday") != -1) {
+
+        outDate = jsReplace(outDate, "weekday", weekday.toLowerCase());
+
+    }
+
+    // RETURN WEEKDAY (UPPERCASE LETTERS)
+
+    else if (calDateFormat.indexOf("WEEKDAY") != -1) {
+
+        outDate = jsReplace(outDate, "WEEKDAY", weekday.toUpperCase());
+
+    }
+
+
+
+    // RETURN WEEKDAY 3-DAY ABBREVIATION (Initial Caps)
+
+    if (calDateFormat.indexOf("Wkdy") != -1) {
+
+        outDate = jsReplace(outDate, "Wkdy", weekdayAbbrev);
+
+    }
+
+    // RETURN WEEKDAY 3-DAY ABBREVIATION (lowercase letters)
+
+    else if (calDateFormat.indexOf("wkdy") != -1) {
+
+        outDate = jsReplace(outDate, "wkdy", weekdayAbbrev.toLowerCase());
+
+    }
+
+    // RETURN WEEKDAY 3-DAY ABBREVIATION (UPPERCASE LETTERS)
+
+    else if (calDateFormat.indexOf("WKDY") != -1) {
+
+        outDate = jsReplace(outDate, "WKDY", weekdayAbbrev.toUpperCase());
+
+    }
+
+
+
+    // SET THE VALUE OF THE FIELD THAT WAS PASSED TO THE CALENDAR
+
+    calDateField.value = outDate;
+
+
+
+    // GIVE FOCUS BACK TO THE DATE FIELD
+
+    calDateField.focus();
+
+
+
+    // CLOSE THE CALENDAR WINDOW
+
+    newWin.close();
+
+    
+
+    // SE LLAMA LA FUNCION QUE DA UN SUBMIT A LA PAG PARA RECARGAR LOS DATOS
+
+    cambioDatos();
+
+}
+
+
+
+</script>
+
+<script language="javascript">
+
+
+
+function compareDates(di,dj){
+
+  var d1 = di.replace('-','');
+
+  var d2 = dj.replace('-','');
+
+  return(d1==d2?0:d1>d2?1:-1)
+
+};
+
+
+
+function comparaFechas(d_Fec_Ini,d_Fec_Fin) {
+
+  var d_fec_ini = d_Fec_Ini;
+
+  var d_fec_fin = d_Fec_Fin;
+
+  if (d_fec_ini =="") {
+
+    alert("Favor de seleccionar la Fecha Inicial.");
+
+    return 1;
+
+  }
+
+  else if (d_fec_fin =="") {
+
+    alert("Favor de seleccionar la Fecha Final.");
+
+    return 1;
+
+  }
+
+  else if (compareDates(d_fec_ini, d_fec_fin)>0) {
+
+    alert("La Fecha Final: " + d_fec_fin + " no puede ser menor a la Fecha Inicial:" + d_fec_ini + ".");
+
+    return 1;
+
+  }else{
+
+    return 0;
+
+  }
+
+}
+
+
+
+function Agrega_Dias_Fecha (Fecha,Dias,obj_fecha) {
+
+   var fecha;
+
+   var dias;
+
+
+
+   fecha = Fecha.value;
+
+   dias = Dias.value;
+
+   dias = parseInt(dias);
+
+
+
+   var array_fecha = fecha.split("/");
+
+   //compruebo que los ano, mes, dia son correctos 
+
+   var ano 
+
+   ano = parseInt(array_fecha[2]); 
+
+   if (isNaN(ano)) 
+
+      return false 
+
+
+
+   var mes 
+
+   mes = parseInt(array_fecha[1]); 
+
+   if (isNaN(mes)) 
+
+      return false 
+
+
+
+   var dia 
+
+   dia = parseInt(array_fecha[0]); 
+
+   if (isNaN(dia)) 
+
+      return false 
+
+   dia = dia + 1;
+
+
+
+   //si el ano de la fecha que recibo solo tiene 2 cifras hay que cambiarlo a 4 
+
+   if (ano<=99) 
+
+      ano +=1900 
+
+
+
+   var Dfecha = new Date (ano,mes-1,dia);
+
+   var Sig_Fecha = new Date();
+
+   //alert (Dfecha);
+
+   Sig_Fecha.setTime(Dfecha.getTime() + dias  * 24 * 60 * 60 * 1000);
+
+
+
+
+
+   var dia_sig = Sig_Fecha.getDate();
+
+   var mes_sig = Sig_Fecha.getMonth() + 1;
+
+   var ano_sig = Sig_Fecha.getYear();
+
+
+
+   if (dia_sig < 10 ){
+
+     dia_sig = "0" + dia_sig;
+
+   }
+
+
+
+   if (mes_sig < 10 ){
+
+     mes_sig = "0" + mes_sig;
+
+   }
+
+
+
+   var Fecha_Siguiente = dia_sig + "/" + mes_sig + "/" + ano_sig;
+
+
+
+   obj_fecha.value = Fecha_Siguiente;
+
+
+
+}
+
+
+
+function Diferencia_Entre_Fechas (Fecha_Ini,Fecha_Fin,obj_diferencia) {
+
+  var dif_dias;
+
+  var fecha_ini;
+
+  var fecha_fin;
+
+
+
+  fecha_ini = Fecha_Ini.value;
+
+  fecha_fin = Fecha_Fin.value;
+
+
+
+  //if (comparaFechas(fecha_ini,fecha_fin) == 0){
+
+    //calculo la fecha inicial
+
+    //La descompongo en un array
+
+    var array_fecha_ini = fecha_ini.split("/");
+
+    //si el array no tiene tres partes, la fecha es incorrecta 
+
+    if (array_fecha_ini.length!=3){ 
+
+       array_fecha_ini = fecha_ini.split("-");
+
+       if (array_fecha_ini.length!=3)
+
+       return false 
+
+    }
+
+
+
+    //compruebo que los ano, mes, dia son correctos 
+
+    var ano_ini 
+
+    ano_ini = array_fecha_ini[2]; 
+
+    if (isNaN(ano_ini)) 
+
+       return false 
+
+
+
+    var mes_ini 
+
+    mes_ini = array_fecha_ini[1]; 
+
+    if (isNaN(mes_ini)) 
+
+       return false 
+
+
+
+    var dia_ini 
+
+    dia_ini = array_fecha_ini[0]; 
+
+    if (isNaN(dia_ini)) 
+
+       return false 
+
+
+
+
+
+    //si el ano de la fecha que recibo solo tiene 2 cifras hay que cambiarlo a 4 
+
+    if (ano_ini<=99) 
+
+       ano_ini +=1900 
+
+
+
+    //calculo la fecha Final
+
+    //La descompongo en un array 
+
+    var array_fecha_fin = fecha_fin.split("/") 
+
+    //si el array no tiene tres partes, la fecha es incorrecta 
+
+    if (array_fecha_fin.length!=3) 
+
+       return false 
+
+
+
+    //compruebo que los ano, mes, dia son correctos 
+
+    var ano_fin 
+
+    ano_fin = array_fecha_fin[2]; 
+
+    if (isNaN(ano_fin)) 
+
+       return false 
+
+
+
+    var mes_fin 
+
+    mes_fin = array_fecha_fin[1]; 
+
+    if (isNaN(mes_fin)) 
+
+       return false 
+
+
+
+    var dia_fin 
+
+    dia_fin = array_fecha_fin[0]; 
+
+    if (isNaN(dia_fin)) 
+
+       return false 
+
+
+
+    //alert(ano_fin +"/"+ mes_fin +"/"+ dia_fin);
+
+
+
+    //si el ano de la fecha que recibo solo tiene 2 cifras hay que cambiarlo a 4 
+
+    if (ano_fin<=99) 
+
+       ano_fin +=1900 
+
+
+
+    //CALCULO LA DIFERENCIA ENTRE LAS 2 FECHAS
+
+    var Fini = new Date(ano_ini,mes_ini-1,dia_ini);
+
+    var Ffin = new Date(ano_fin,mes_fin-1,dia_fin);
+
+
+
+
+
+    //var diferencia_dias = (Ffin-Fini);
+
+    var diferencia_dias = Math.round((Ffin-Fini)/86400000);
+
+    obj_diferencia.value =diferencia_dias;
+
+     
+
+  //}else{
+
+  //  obj_diferencia.value = 0;
+
+  //}
+
+}
+
+</script>
+
+</head><body link="white" vlink="white" alink="white"><center>
+<table border="0" cellsapcing="0" cellpadding="0" bgcolor="#E5E5E5">
+<tbody><tr><td><img src="/VAL/Web_Benchmarks/Logo/Logo_Valmer_Gris.jpg" align="left">
+</td><td width="235"></td>
+<td><table border="0" cellsapcing="0" cellpadding="0"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr>
+<td><a href="/cgi/PRBSIBOLSA_Calculadora_Instrumentos_Guber.pl?cambio_combo=2&amp;tv=LF&amp;emisora=BONOS&amp;serie=200611&amp;carga_fecha=1&amp;habilitaRadio=1&amp;"> <img src="/VAL/Web_Benchmarks/GRA/calculadora.jpg" border="0"> </a></td>
+<td><a href="/cgi/PRBSIBOLSA_Historia_Graficos.pl?cambio_combo=3&amp;tv=LF&amp;emisora=BONOS&amp;serie=200611"><img src="/VAL/Web_Benchmarks/GRA/historico.jpg" border="0"></a></td>
+<td><a href="/cgi/PRBSIBOLSA_Caracteristicas_Guber.pl?cambio_combo=2&amp;tv=LF&amp;emisora=BONOS&amp;serie=200611&amp;carga_fecha=1&amp;habilitaRadio=1&amp;"><img src="/VAL/Web_Benchmarks/GRA/caracteristicas.jpg" border="0"></a></td>
+<td><a href="/cgi/PRBSIBOLSA_Calculadora_Instrumentos_Guber.pl"><img src="/VAL/Web_Benchmarks/GRA/regresar.jpg" border="0"></a></td>
+</tr></tbody></table>
+</td></tr></tbody></table>
+</center>
+
+
+
+<form name="formcal">
+<input type="hidden" name="cambio_combo" value="1">
+<input type="hidden" name="carga_fecha" value="">
+<input type="hidden" name="calculo_datos" value="0">
+<input type="hidden" name="instrumento" value="">
+<input type="hidden" name="PBedit_chec" value="">
+<input type="hidden" name="habilitaPSucio" value="">
+<input type="hidden" name="habilitaRadio" value="1">
+<input type="hidden" name="b_sobretasa_yield" value="0">
+<center>
+<table border="0" align="center">
+<tbody><tr>
+<td>
+<table border="0">
+	<tbody><tr align="center"><td width="100"><span class="Pubsubtitulo">Tipo Valor</span></td>
+	<td width="100"><span class="Pubsubtitulo">Emisora</span></td>
+	<td width="100"><span class="Pubsubtitulo">Serie</span></td></tr>
+
+	<tr><td><span class="select"><select name="tv" style="width: 100px" onchange="cargaEmisoras(this.value);">
+			<option value="LF" selected="">LF</option>
+			<option>-----------------------</option>
+			<option value="2U">2U</option>
+			<option value="6U">6U</option>
+			<option value="BI">BI</option>
+			<option value="CC">CC</option>
+			<option value="CP">CP</option>
+			<option value="IM">IM</option>
+			<option value="IP">IP</option>
+			<option value="IQ">IQ</option>
+			<option value="IS">IS</option>
+			<option value="IT">IT</option>
+			<option value="LD">LD</option>
+			<option value="LF">LF</option>
+			<option value="LS">LS</option>
+			<option value="LT">LT</option>
+			<option value="M">M</option>
+			<option value="M0">M0</option>
+			<option value="M3">M3</option>
+			<option value="M5">M5</option>
+			<option value="M7">M7</option>
+			<option value="MC">MC</option>
+			<option value="MP">MP</option>
+			<option value="PI">PI</option>
+			<option value="S">S</option>
+			<option value="S0">S0</option>
+			<option value="S5">S5</option>
+			<option value="SC">SC</option>
+			<option value="SP">SP</option>
+			<option value="XA">XA</option>
+		</select></span></td>
+		<td><span class="select"><select name="emisora" style="width: 100px" onchange="cargaSerie();">
+			<option value="BONDESF" selected="">BONDESF</option>
+			<option>-----------------------</option>
+			<option value="BONDESF">BONDESF</option>
+		</select></span></td>
+		<td><span class="select"><select name="serie" style="width: 100px" onchange="importaFecha();">
+			<option>-----------------------</option>
+			<option value="230622">230622</option>
+			<option value="230720">230720</option>
+			<option value="230831">230831</option>
+			<option value="231005">231005</option>
+			<option value="231012">231012</option>
+			<option value="231130">231130</option>
+			<option value="240104">240104</option>
+			<option value="240111">240111</option>
+			<option value="240201">240201</option>
+			<option value="240229">240229</option>
+			<option value="240314">240314</option>
+			<option value="240321">240321</option>
+			<option value="240425">240425</option>
+			<option value="240523">240523</option>
+			<option value="240725">240725</option>
+			<option value="241003">241003</option>
+			<option value="241024">241024</option>
+			<option value="241128">241128</option>
+			<option value="250102">250102</option>
+			<option value="250130">250130</option>
+			<option value="250227">250227</option>
+			<option value="250313">250313</option>
+			<option value="250327">250327</option>
+			<option value="250424">250424</option>
+			<option value="250619">250619</option>
+			<option value="250724">250724</option>
+			<option value="251002">251002</option>
+			<option value="251023">251023</option>
+			<option value="251204">251204</option>
+			<option value="260108">260108</option>
+			<option value="260226">260226</option>
+			<option value="260423">260423</option>
+			<option value="261001">261001</option>
+			<option value="261203">261203</option>
+			<option value="261231">261231</option>
+			<option value="270128">270128</option>
+			<option value="270225">270225</option>
+			<option value="270318">270318</option>
+			<option value="270422">270422</option>
+			<option value="270617">270617</option>
+			<option value="270819">270819</option>
+			<option value="270930">270930</option>
+			<option value="271014">271014</option>
+			<option value="280323">280323</option>
+			<option value="290125">290125</option>
+			<option value="290322">290322</option>
+			<option value="290419">290419</option>
+			<option value="291004">291004</option>
+			<option value="320415">320415</option>
+			<option value="321021">321021</option>
+		</select></span></td></tr>
+	</tbody></table>
+</td>
+<td width="200">&nbsp;</td>
+<td valign="bottom">
+<input class="botonCalcu" type="submit" name="calcular" value="Calcular" onclick="calculoDatos();">
+</td>
+<td width="100">&nbsp;</td>
+<td valign="bottom">
+<input class="radio" type="radio" name="radio" value="precio" checked="true"><span class="Pubtitulo">Precio
+<br>
+<input class="radio" type="radio" name="radio" value="ytm" onclick="yield(1,formcal.b_sobretasa_yield,habilitaPSucio);"><span class="Pubtitulo">YTM / Sobre Tasa
+</span></span></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td class="Pubsubtitulo">Fecha Valuación <input type="text" name="fecha" value="2023/05/28" class="Plain" onchange="cambioDatos();">
+<a href="javascript:doNothing()" onclick="despliega_Calendario();"><img src="http://www.valmer.com.mx/VAL/Web_Benchmarks/GRA/calbtn.gif" width="34" height="22" border="0" align="absmiddle"></a>
+</td></tr>
+</tbody></table>
+<br><br>
+<table border="1" align="center" bordercolor="#FFFFFF">
+<tbody><tr>
+<td class="Sub_Titulo_Informacion1" align="center">VALUACIÓN</td>
+<td>&nbsp;</td>
+<td class="Sub_Titulo_Informacion1" align="center">DATOS</td>
+</tr>
+<tr>
+<td valign="top" bordercolor="#CFCFCF">
+<table border="1" width="380">
+<tbody><tr>
+<td class="RenglonTabla2">
+Tipo Instrumento
+</td>
+<td class="RenglonTabla2">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td class="RenglonTabla1">
+Tasa Referencia
+</td>
+<td class="RenglonTabla1">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td class="RenglonTabla2">
+Curva Descuento
+</td>
+<td class="RenglonTabla2">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td class="RenglonTabla1">
+Moneda
+</td>
+<td class="RenglonTabla1">
+&nbsp;
+</td>
+</tr>
+</tbody></table>
+<br><br>
+<table border="1" bordercolor="#CFCFCF">
+<tbody><tr><td colspan="3" align="center" class="TituloTabla">Fórmula Estandarizada</td></tr>
+<tr>
+<td class="SubtituloTabla" width="120">Precio Sucio</td>
+<td class="SubtituloTabla" width="120">Precio Limpio</td>
+<td class="SubtituloTabla" width="120">Intereses</td>
+</tr>
+<tr>
+<td class="RenglonTabla1" align="center"><input type="text" name="precioSucio" size="15" disabled="true" value=""></td>
+<td class="RenglonTabla1">&nbsp;</td>
+<td class="RenglonTabla1">&nbsp;</td>
+</tr>
+</tbody></table>
+<br>
+<table border="1" bordercolor="#CFCFCF">
+<tbody><tr>
+<td class="TituloTabla" colspan="3">Fórmula Flujos</td>
+</tr>
+<tr>
+<td class="SubTituloTabla" width="120">Precio Sucio</td>
+<td class="SubTituloTabla" width="120">Precio Limpio</td>
+<td class="SubTituloTabla" width="120">Intereses</td>
+</tr>
+<tr>
+<td class="RenglonTabla1">&nbsp;</td>
+<td class="RenglonTabla1">&nbsp;</td>
+<td class="RenglonTabla1">&nbsp;</td>
+</tr>
+</tbody></table>
+<br>
+<table border="1">
+<tbody><tr>
+<td class="TituloTabla" colspan="3">Medidas de Sensibilidad</td>
+</tr>
+<tr>
+<td class="SubTituloTabla">Duración Modificada</td>
+<td class="SubTituloTabla">Duración Cupón</td>
+<td class="SubTituloTabla">Convexidad</td>
+</tr>
+<tr>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+</tr>
+<tr>
+<td class="SubTituloTabla">Duración Macaulay</td>
+<td class="SubTituloTabla">Duración Monetaria</td>
+<td class="SubTituloTabla">+ <input type="text" class="plain" name="PBedit" size="1" value=""> pb</td>
+</tr>
+<tr>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+<td class="RenglonTabla1" width="120">&nbsp;</td>
+</tr>
+</tbody></table>
+</td>
+<td>&nbsp;</td>
+<td valign="top" bordercolor="#CFCFCF">
+<table border="0" width="320">
+<tbody><tr>
+<td class="RenglonTabla2" width="215">Sobretasa</td>
+<td align="right" class="RenglonTabla2"><input type="text" class="Plain" name="sobretasa" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Tasa Rendimiento (YTM)</td>
+<td align="right" class="RenglonTabla1"><input type="text" class="Plain" name="tasaRendimiento" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Tasa Cupón</td>
+<td align="right" class="RenglonTabla2"><input type="text" class="Plain" name="tasaCupon" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Tasa Mercado</td>
+<td align="right" class="RenglonTabla1"><input type="text" class="Plain" name="tasaMercado" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">ISR (Gross up)</td>
+<td align="right" class="RenglonTabla2"><input type="text" class="Plain" name="isr" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Tipo de Cambio (UDI)</td>
+<td align="right" class="RenglonTabla1"><input type="text" class="Plain" name="tipoCambioUDI" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Tipo de Cambio (USD)</td>
+<td align="right" class="RenglonTabla2"><input type="text" class="Plain" name="tipoCambioUSD" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Tasa Descuento</td>
+<td align="right" class="RenglonTabla1"><input type="text" class="Plain" name="tasaDescuento" value="" size="10"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Prima</td>
+<td align="right" class="RenglonTabla2"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Fecha Inicio Cupón</td>
+<td align="right" class="RenglonTabla1"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Fecha de Vto. (Legal)</td>
+<td align="right" class="RenglonTabla2"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Fecha de Vto. (Estimada)</td>
+<td align="right" class="RenglonTabla1"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Días Vencimiento</td>
+<td align="right" class="RenglonTabla2"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Valor Nominal</td>
+<td align="right" class="RenglonTabla1"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Período Cupón Vigente</td>
+<td align="right" class="RenglonTabla2"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Período Cupón</td>
+<td align="right" class="RenglonTabla1"></td>
+</tr>
+<tr>
+<td class="RenglonTabla2">Días Trans. Cupón</td>
+<td align="right" class="RenglonTabla2"></td>
+</tr>
+<tr>
+<td class="RenglonTabla1">Cupones Pendientes</td>
+<td align="right" class="RenglonTabla1"></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<br><br>
+<table border="1" align="center" bordercolor="#FFFFFF">
+<tbody><tr>
+<td colspan="7" class="Sub_Titulo_Informacion1" align="center">FLUJOS</td>
+</tr>
+<tr>
+<td colspan="7" bordercolor="#CFCFCF" align="center">
+<table border="0" width="715">
+<tbody><tr>
+</tr><tr><td colspan="7">&nbsp;</td></tr>
+<tr><td class="TituloTabla" align="center">Fecha</td>
+<td class="TituloTabla" align="center">Días</td>
+<td class="TituloTabla" align="center">Período</td>
+<td class="TituloTabla" align="center">Intereses</td>
+<td class="TituloTabla" align="center">Valor Nominal</td>
+<td class="TituloTabla" align="center">Amortizaciones</td>
+<td class="TituloTabla" align="center">Flujo</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</center>
+</form>
+
+<div align="center">
+<table class="Borde_Sup_Tabla" width="915" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td width="915">
+<div align="right" class="Titulo_Pie">
+<a href="http://www.valmer.com.mx" target="_parent" title="HOME">HOME</a> / <a href="/VAL/como_contac.html" target="_parent" title="CONTACTANOS">CONTACTANOS</a> / <a href="/VAL/mapa.html" title="mapa del sitio">MAPA DEL SITIO</a> / <a href="/VAL/sitios.html" title="sitios relevantes">SITIOS RELEVANTES</a> / <a href="/cgi/CAU_Valmer_Inicial.pl">CAU</a></div>
+</td>
+  </tr>
+</tbody></table>
+</div>
+
+</body></html>
